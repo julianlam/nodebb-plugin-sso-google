@@ -1,0 +1,31 @@
+{
+  "name": "nodebb-plugin-sso-google",
+  "version": "0.1.0-1",
+  "description": "NodeBB Google SSO",
+  "main": "library.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/julianlam/nodebb-plugin-sso-google"
+  },
+  "keywords": [
+    "nodebb",
+    "plugin",
+    "google",
+    "sso",
+    "single sign on",
+    "registration"
+  ],
+  "author": {
+    "name": "Julian Lam",
+    "email": "julian@nodebb.org"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/julianlam/nodebb-plugin-sso-google/issues"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "passport-google-oauth": "~0.1.5"
+  }
+}
