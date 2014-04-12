@@ -13,38 +13,49 @@
 	var constants = Object.freeze({
 		'name': "Google",
 		'admin': {
-			'route': '/google',
+			'route': '/plugins/sso-google',
 			'icon': 'fa-google-plus-square'
 		}
 	});
 
 	var Google = {};
 
-	Google.getStrategy = function(strategies) {
-		if (meta.config['social:google:id'] && meta.config['social:google:secret']) {
-			passport.use(new passportGoogle({
-				clientID: meta.config['social:google:id'],
-				clientSecret: meta.config['social:google:secret'],
-				callbackURL: nconf.get('url') + '/auth/google/callback'
-			}, function(accessToken, refreshToken, profile, done) {
-				Google.login(profile.id, profile.displayName, profile.emails[0].value, function(err, user) {
-					if (err) {
-						return done(err);
-					}
-					done(null, user);
-				});
-			}));
-
-			strategies.push({
-				name: 'google',
-				url: '/auth/google',
-				callbackURL: '/auth/google/callback',
-				icon: 'google-plus',
-				scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
-			});
+	Google.init = function(app, middleware, controllers) {
+		function render(req, res, next) {
+			res.render('admin/plugins/sso-google', {});
 		}
 
-		return strategies;
+		app.get('/admin/plugins/sso-google', middleware.admin.buildHeader, render);
+		app.get('/api/admin/plugins/sso-google', render);
+	}
+
+	Google.getStrategy = function(strategies, callback) {
+		meta.settings.get('sso-google', function(err, settings) {
+			if (!err && settings['id'] && settings['secret']) {
+				passport.use(new passportGoogle({
+					clientID: settings['id'],
+					clientSecret: settings['secret'],
+					callbackURL: nconf.get('url') + '/auth/google/callback'
+				}, function(accessToken, refreshToken, profile, done) {
+					Google.login(profile.id, profile.displayName, profile.emails[0].value, function(err, user) {
+						if (err) {
+							return done(err);
+						}
+						done(null, user);
+					});
+				}));
+
+				strategies.push({
+					name: 'google',
+					url: '/auth/google',
+					callbackURL: '/auth/google/callback',
+					icon: 'google-plus',
+					scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+				});
+			}
+
+			callback(null, strategies);
+		});
 	};
 
 	Google.login = function(gplusid, handle, email, callback) {
@@ -99,35 +110,15 @@
 		});
 	};
 
-	Google.addMenuItem = function(custom_header) {
+	Google.addMenuItem = function(custom_header, callback) {
 		custom_header.authentication.push({
 			"route": constants.admin.route,
 			"icon": constants.admin.icon,
 			"name": constants.name
 		});
 
-		return custom_header;
+		callback(null, custom_header);
 	}
-
-	Google.addAdminRoute = function(custom_routes, callback) {
-		fs.readFile(path.resolve(__dirname, './static/admin.tpl'), function (err, template) {
-			custom_routes.routes.push({
-				"route": constants.admin.route,
-				"method": "get",
-				"options": function(req, res, callback) {
-					callback({
-						req: req,
-						res: res,
-						route: constants.admin.route,
-						name: constants.name,
-						content: template
-					});
-				}
-			});
-
-			callback(null, custom_routes);
-		});
-	};
 
 	module.exports = Google;
 }(module));

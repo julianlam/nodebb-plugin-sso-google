@@ -4,16 +4,12 @@
 	"description": "NodeBB Plugin that allows users to login/register via their Google account.",
 	"url": "https://github.com/julianlam/nodebb-plugin-sso-google",
 	"library": "./library.js",
+	"templates": "templates",
 	"hooks": [
-		{
-			"hook": "filter:auth.init", "method": "getStrategy", "callbacked": false
-		},
-		{
-			"hook": "filter:admin.header.build", "method": "addMenuItem", "callbacked": false
-		},
-		{
-			"hook": "filter:admin.create_routes", "method": "addAdminRoute", "callbacked": true
-		}
+		{ "hook": "action:app.load", "method": "init" },
+		{ "hook": "filter:auth.init", "method": "getStrategy" },
+		{ "hook": "filter:admin.header.build", "method": "addMenuItem" }
 	],
-	"staticDir": "./static"
+	"staticDir": "./static",
+	"minver": "0.4.0"
 }
