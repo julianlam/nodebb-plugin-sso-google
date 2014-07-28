@@ -51,7 +51,7 @@
 					name: 'google',
 					url: '/auth/google',
 					callbackURL: '/auth/google/callback',
-					icon: 'google-plus',
+					icon: 'fa-google-plus-square',
 					scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
 				});
 			}
