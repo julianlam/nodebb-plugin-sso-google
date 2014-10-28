@@ -5,6 +5,7 @@
 		meta = module.parent.require('./meta'),
 		db = module.parent.require('../src/database'),
 		passport = module.parent.require('passport'),
+		shortId = require('shortid'),
   		passportGoogle = require('passport-google-oauth').OAuth2Strategy,
   		fs = module.parent.require('fs'),
   		path = module.parent.require('path'),
@@ -74,6 +75,9 @@
 			} else {
 				// New User
 				var success = function(uid) {
+					// Set fullname to the handle
+					User.setUserField(uid, 'fullname', handle);
+
 					// Save google-specific information to the user
 					User.setUserField(uid, 'gplusid', gplusid);
 					db.setObjectField('gplusid:uid', gplusid, uid);
@@ -95,7 +99,7 @@
 					}
 
 					if (!uid) {
-						User.create({username: handle, email: email}, function(err, uid) {
+						User.create({username: shortId.generate(), email: email}, function(err, uid) {
 							if(err) {
 								return callback(err);
 							}
