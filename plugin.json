@@ -10,6 +10,5 @@
 		{ "hook": "filter:auth.init", "method": "getStrategy" },
 		{ "hook": "filter:admin.header.build", "method": "addMenuItem" }
 	],
-	"staticDir": "./static",
 	"minver": "0.4.0"
 }
