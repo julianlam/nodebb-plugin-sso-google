@@ -10,7 +10,10 @@
 		</p>
 		<br />
 		<input type="text" name="id" title="Client ID" class="form-control input-lg" placeholder="Client ID"><br />
-		<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret"><br />
+		<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret">
+		<p class="help-block">
+			The appropriate "Redirect URI" is your NodeBB's URL with `/auth/google/callback` appended to it.
+		</p>
 	</div>
 </form>
 
