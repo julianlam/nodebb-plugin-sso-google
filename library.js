@@ -39,7 +39,7 @@
 					clientSecret: settings['secret'],
 					callbackURL: nconf.get('url') + '/auth/google/callback'
 				}, function(accessToken, refreshToken, profile, done) {
-					Google.login(profile.id, profile.displayName, profile.emails[0].value, function(err, user) {
+					Google.login(profile.id, profile.displayName, profile.emails[0].value, profile._json.picture, function(err, user) {
 						if (err) {
 							return done(err);
 						}
@@ -60,7 +60,7 @@
 		});
 	};
 
-	Google.login = function(gplusid, handle, email, callback) {
+	Google.login = function(gplusid, handle, email, picture, callback) {
 		Google.getUidByGoogleId(gplusid, function(err, uid) {
 			if(err) {
 				return callback(err);
@@ -77,6 +77,13 @@
 					// Save google-specific information to the user
 					User.setUserField(uid, 'gplusid', gplusid);
 					db.setObjectField('gplusid:uid', gplusid, uid);
+					
+					// Save their photo, if present
+					if (picture) {
+						User.setUserField(uid, 'uploadedpicture', picture);
+						User.setUserField(uid, 'picture', picture);
+					}
+					
 					callback(null, {
 						uid: uid
 					});
