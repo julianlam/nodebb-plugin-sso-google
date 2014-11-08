@@ -20,13 +20,13 @@
 
 	var Google = {};
 
-	Google.init = function(app, middleware, controllers, callback) {
+	Google.init = function(data, callback) {
 		function render(req, res, next) {
 			res.render('admin/plugins/sso-google', {});
 		}
 
-		app.get('/admin/plugins/sso-google', middleware.admin.buildHeader, render);
-		app.get('/api/admin/plugins/sso-google', render);
+		data.app.get('/admin/plugins/sso-google', data.middleware.admin.buildHeader, render);
+		data.app.get('/api/admin/plugins/sso-google', render);
 
 		callback();
 	}
