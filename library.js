@@ -25,8 +25,8 @@
 			res.render('admin/plugins/sso-google', {});
 		}
 
-		data.app.get('/admin/plugins/sso-google', data.middleware.admin.buildHeader, render);
-		data.app.get('/api/admin/plugins/sso-google', render);
+		data.router.get('/admin/plugins/sso-google', data.middleware.admin.buildHeader, render);
+		data.router.get('/api/admin/plugins/sso-google', render);
 
 		callback();
 	}
