@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-sso-google",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "NodeBB Google SSO",
   "main": "library.js",
   "repository": {
