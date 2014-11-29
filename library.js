@@ -129,5 +129,20 @@
 		callback(null, custom_header);
 	}
 
+	Google.deleteUserData = function(uid, callback) {
+		async.waterfall([
+			async.apply(user.getUserField, uid, 'gplusid'),
+			function(oAuthIdToDelete, next) {
+				db.deleteObjectField('gplusid:uid', oAuthIdToDelete, next);
+			}
+		], function(err) {
+			if (err) {
+				winston.error('[sso-google] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
+				return callback(err);
+			}
+			callback(null, uid);
+		});
+	};
+
 	module.exports = Google;
 }(module));
