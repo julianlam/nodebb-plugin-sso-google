@@ -8,7 +8,8 @@
   		passportGoogle = require('passport-google-oauth').OAuth2Strategy,
   		fs = module.parent.require('fs'),
   		path = module.parent.require('path'),
-  		nconf = module.parent.require('nconf');
+  		nconf = module.parent.require('nconf'),
+        async = module.parent.require('async');
 
 	var constants = Object.freeze({
 		'name': "Google",
