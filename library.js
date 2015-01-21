@@ -132,7 +132,7 @@
 
 	Google.deleteUserData = function(uid, callback) {
 		async.waterfall([
-			async.apply(user.getUserField, uid, 'gplusid'),
+			async.apply(User.getUserField, uid, 'gplusid'),
 			function(oAuthIdToDelete, next) {
 				db.deleteObjectField('gplusid:uid', oAuthIdToDelete, next);
 			}
