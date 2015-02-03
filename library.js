@@ -78,6 +78,7 @@
 					// Save google-specific information to the user
 					User.setUserField(uid, 'gplusid', gplusid);
 					db.setObjectField('gplusid:uid', gplusid, uid);
+					User.setUserField(uid, 'email:confirmed', 1);
 					
 					// Save their photo, if present
 					if (picture) {
