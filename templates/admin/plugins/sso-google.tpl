@@ -1,7 +1,7 @@
 <h1><i class="fa fa-google-plus-square"></i> Google Accounts Social Authentication</h1>
 <hr />
 
-<form class="sso-google">
+<form class="sso-google-confirmed">
 	<div class="alert alert-warning">
 		<p>
 			Create a <strong>Google Application</strong> via the
@@ -21,10 +21,10 @@
 
 <script>
 	require(['settings'], function(Settings) {
-		Settings.load('sso-google', $('.sso-google'));
+		Settings.load('sso-google-confirmed', $('.sso-google-confirmed'));
 
 		$('#save').on('click', function() {
-			Settings.save('sso-google', $('.sso-google'));
+			Settings.save('sso-google-confirmed', $('.sso-google-confirmed'));
 		});
 	});
 </script>

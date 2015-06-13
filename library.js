@@ -14,7 +14,7 @@
 	var constants = Object.freeze({
 		'name': "Google",
 		'admin': {
-			'route': '/plugins/sso-google',
+			'route': '/plugins/sso-google-confirmed',
 			'icon': 'fa-google-plus-square'
 		}
 	});
@@ -23,17 +23,17 @@
 
 	Google.init = function(data, callback) {
 		function render(req, res, next) {
-			res.render('admin/plugins/sso-google', {});
+			res.render('admin/plugins/sso-google-confirmed', {});
 		}
 
-		data.router.get('/admin/plugins/sso-google', data.middleware.admin.buildHeader, render);
-		data.router.get('/api/admin/plugins/sso-google', render);
+		data.router.get('/admin/plugins/sso-google-confirmed', data.middleware.admin.buildHeader, render);
+		data.router.get('/api/admin/plugins/sso-google-confirmed', render);
 
 		callback();
 	}
 
 	Google.getStrategy = function(strategies, callback) {
-		meta.settings.get('sso-google', function(err, settings) {
+		meta.settings.get('sso-google-confirmed', function(err, settings) {
 			if (!err && settings['id'] && settings['secret']) {
 				passport.use(new passportGoogle({
 					clientID: settings['id'],
@@ -139,7 +139,7 @@
 			}
 		], function(err) {
 			if (err) {
-				winston.error('[sso-google] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
+				winston.error('[sso-google-confirmed] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
 				return callback(err);
 			}
 			callback(null, uid);

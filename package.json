@@ -1,11 +1,11 @@
 {
-  "name": "nodebb-plugin-sso-google",
+  "name": "nodebb-plugin-sso-google-confirmed",
   "version": "0.4.3",
   "description": "NodeBB Google SSO",
   "main": "library.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/julianlam/nodebb-plugin-sso-google"
+    "url": "https://github.com/drewdotpro/nodebb-plugin-sso-google-confirmed"
   },
   "keywords": [
     "nodebb",
@@ -16,12 +16,12 @@
     "registration"
   ],
   "author": {
-    "name": "Julian Lam",
-    "email": "julian@nodebb.org"
+    "name": "Drew Llewellyn",
+    "email": "drew@drew.pro"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/julianlam/nodebb-plugin-sso-google/issues"
+    "url": "https://github.com/drewdotpro/nodebb-plugin-sso-google-confirmed/issues"
   },
   "readme": "",
   "readmeFilename": "README.md",

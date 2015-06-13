@@ -1,10 +1,10 @@
 # NodeBB Google SSO
 
-NodeBB Plugin that allows users to login/register via their Google account.
+NodeBB Plugin that allows users to login/register via their Google account. Users are automatically confirmed.
 
 ## Installation
 
-    npm install nodebb-plugin-sso-google
+    npm install nodebb-plugin-sso-google-confirmed
 
 ## Configuration
 

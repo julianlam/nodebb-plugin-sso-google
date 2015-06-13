@@ -1,8 +1,8 @@
 {
-	"id": "nodebb-plugin-sso-google",
-	"name": "NodeBB Google SSO",
+	"id": "nodebb-plugin-sso-google-confirmed",
+	"name": "NodeBB Google SSO Auto Confirmed",
 	"description": "NodeBB Plugin that allows users to login/register via their Google account.",
-	"url": "https://github.com/julianlam/nodebb-plugin-sso-google",
+	"url": "https://github.com/drewdotpro/nodebb-plugin-sso-google-confirmed",
 	"library": "./library.js",
 	"templates": "templates",
 	"hooks": [
