@@ -22,10 +22,6 @@
 	var Google = {};
 
 	Google.init = function(data, callback) {
-		meta.settings.get('sso-google', function(err, settings) {
-			console.log("SETTINGS:");
-			console.log(settings);
-		});
 		function render(req, res, next) {
 			res.render('admin/plugins/sso-google', {});
 		}
@@ -80,7 +76,7 @@
 				// New User
 				var success = function(uid) {
 					meta.settings.get('sso-google', function(err, settings) {
-						var autoConfirm = settings && settings['autoconfirm'] === true ? 1 : 0;
+						var autoConfirm = settings && settings['autoconfirm'] === "on" ? 1 : 0;
 						User.setUserField(uid, 'email:confirmed', autoConfirm);
 						// Save google-specific information to the user
 						User.setUserField(uid, 'gplusid', gplusid);
