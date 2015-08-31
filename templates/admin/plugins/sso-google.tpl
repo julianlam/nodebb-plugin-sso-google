@@ -11,6 +11,7 @@
 		<br />
 		<input type="text" name="id" title="Client ID" class="form-control input-lg" placeholder="Client ID"><br />
 		<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret">
+		<label for="autoconfirm">Skip email verification for people who register using SSO? <input type="checkbox" name="autoconfirm" class="form-control"></label>
 		<p class="help-block">
 			The appropriate "Redirect URI" is your NodeBB's URL with `/auth/google/callback` appended to it.
 		</p>

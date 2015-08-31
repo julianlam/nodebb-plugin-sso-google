@@ -75,18 +75,23 @@
 			} else {
 				// New User
 				var success = function(uid) {
-					// Save google-specific information to the user
-					User.setUserField(uid, 'gplusid', gplusid);
-					db.setObjectField('gplusid:uid', gplusid, uid);
-					
-					// Save their photo, if present
-					if (picture) {
-						User.setUserField(uid, 'uploadedpicture', picture);
-						User.setUserField(uid, 'picture', picture);
-					}
-					
-					callback(null, {
-						uid: uid
+					meta.settings.get('sso-google', function(err, settings) {
+						var autoConfirm = settings && settings['autoconfirm'] === "on" ? 1 : 0;
+						User.setUserField(uid, 'email:confirmed', autoConfirm);
+						// Save google-specific information to the user
+						User.setUserField(uid, 'gplusid', gplusid);
+						db.setObjectField('gplusid:uid', gplusid, uid);
+
+						// Save their photo, if present
+						if (picture) {
+							User.setUserField(uid, 'uploadedpicture', picture);
+							User.setUserField(uid, 'picture', picture);
+						}
+
+						callback(null, {
+							uid: uid
+						});
+
 					});
 				};
 
