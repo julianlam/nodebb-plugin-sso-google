@@ -10,5 +10,8 @@
 		{ "hook": "filter:auth.init", "method": "getStrategy" },
 		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
 		{ "hook": "filter:user.delete", "method": "deleteUserData" }
+	],
+	"scripts": [
+		"static/lib/admin.js"
 	]
 }
