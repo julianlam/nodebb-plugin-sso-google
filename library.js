@@ -38,8 +38,16 @@
 				passport.use(new passportGoogle({
 					clientID: settings['id'],
 					clientSecret: settings['secret'],
-					callbackURL: nconf.get('url') + '/auth/google/callback'
-				}, function(accessToken, refreshToken, profile, done) {
+					callbackURL: nconf.get('url') + '/auth/google/callback',
+					passReqToCallback: true
+				}, function(req, accessToken, refreshToken, profile, done) {
+					if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
+						// Save Google-specific information to the user
+						User.setUserField(req.user.uid, 'gplusid', profile.id);
+						db.setObjectField('gplusid:uid', profile.id, req.user.uid);
+						return done(null, req.user);
+					}
+
 					Google.login(profile.id, profile.displayName, profile.emails[0].value, profile._json.picture, function(err, user) {
 						if (err) {
 							return done(err);
@@ -52,13 +60,39 @@
 					name: 'google',
 					url: '/auth/google',
 					callbackURL: '/auth/google/callback',
-					icon: 'fa-google-plus-square',
+					icon: constants.admin.icon,
 					scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
 				});
 			}
 
 			callback(null, strategies);
 		});
+	};
+
+	Google.getAssociation = function(data, callback) {
+		User.getUserField(data.uid, 'gplusid', function(err, gplusid) {
+			if (err) {
+				return callback(err, data);
+			}
+
+			if (gplusid) {
+				data.associations.push({
+					associated: true,
+					url: 'https://plus.google.com/' + gplusid + '/posts',
+					name: constants.name,
+					icon: constants.admin.icon
+				});
+			} else {
+				data.associations.push({
+					associated: false,
+					url: nconf.get('url') + '/auth/google',
+					name: constants.name,
+					icon: constants.admin.icon
+				});
+			}
+
+			callback(null, data);
+		})
 	};
 
 	Google.login = function(gplusid, handle, email, picture, callback) {
