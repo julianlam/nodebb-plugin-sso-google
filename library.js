@@ -5,11 +5,13 @@
 		meta = module.parent.require('./meta'),
 		db = module.parent.require('../src/database'),
 		passport = module.parent.require('passport'),
-  		passportGoogle = require('passport-google-oauth').OAuth2Strategy,
-  		fs = module.parent.require('fs'),
-  		path = module.parent.require('path'),
-  		nconf = module.parent.require('nconf'),
-        async = module.parent.require('async');
+		passportGoogle = require('passport-google-oauth').OAuth2Strategy,
+		fs = module.parent.require('fs'),
+		path = module.parent.require('path'),
+		nconf = module.parent.require('nconf'),
+		async = module.parent.require('async');
+
+	var authenticationController = module.parent.require('./controllers/authentication');
 
 	var constants = Object.freeze({
 		'name': "Google",
@@ -52,6 +54,8 @@
 						if (err) {
 							return done(err);
 						}
+
+						authenticationController.onSuccessfulLogin(req, user.uid);
 						done(null, user);
 					});
 				}));
