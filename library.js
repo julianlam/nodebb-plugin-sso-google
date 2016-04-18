@@ -65,7 +65,8 @@
 					url: '/auth/google',
 					callbackURL: '/auth/google/callback',
 					icon: constants.admin.icon,
-					scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+					scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+					prompt: 'select_account'
 				});
 			}
 
