@@ -174,7 +174,9 @@
 		callback(null, custom_header);
 	}
 
-	Google.deleteUserData = function(uid, callback) {
+	Google.deleteUserData = function(data, callback) {
+		var uid = data.uid;
+
 		async.waterfall([
 			async.apply(User.getUserField, uid, 'gplusid'),
 			function(oAuthIdToDelete, next) {
