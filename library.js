@@ -117,6 +117,9 @@
 					meta.settings.get('sso-google', function(err, settings) {
 						var autoConfirm = settings && settings['autoconfirm'] === "on" ? 1 : 0;
 						User.setUserField(uid, 'email:confirmed', autoConfirm);
+						if (autoConfirm) {
+							db.sortedSetRemove('users:notvalidated', uid);
+						}
 						// Save google-specific information to the user
 						User.setUserField(uid, 'gplusid', gplusid);
 						db.setObjectField('gplusid:uid', gplusid, uid);
