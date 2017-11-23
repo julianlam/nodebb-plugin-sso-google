@@ -29,6 +29,6 @@
     "passport-google-oauth": "^0.2.0"
   },
   "nbbpm": {
-    "compatibility": "^1.0.4"
+    "compatibility": "^1.7.1"
   }
 }

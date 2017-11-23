@@ -24,12 +24,30 @@
 	var Google = {};
 
 	Google.init = function(data, callback) {
+		var hostHelpers = require.main.require('./src/routes/helpers');
 		function render(req, res, next) {
 			res.render('admin/plugins/sso-google', {});
 		}
 
 		data.router.get('/admin/plugins/sso-google', data.middleware.admin.buildHeader, render);
 		data.router.get('/api/admin/plugins/sso-google', render);
+
+		hostHelpers.setupPageRoute(data.router, '/deauth/google', data.middleware, [data.middleware.requireUser], function (req, res) {
+			res.render('plugins/sso-google/deauth', {
+				service: "Google",
+			});
+		});
+		data.router.post('/deauth/google', data.middleware.requireUser, function (req, res, next) {
+			Google.deleteUserData({
+				uid: req.user.uid,
+			}, function (err) {
+				if (err) {
+					return next(err);
+				}
+
+				res.redirect(nconf.get('relative_path') + '/user/admin/edit');
+			});
+		});
 
 		callback();
 	}
@@ -74,6 +92,11 @@
 		});
 	};
 
+	Google.appendUserHashWhitelist = function (data, callback) {
+		data.whitelist.push('gplusid');
+		return setImmediate(callback, null, data);
+	};
+
 	Google.getAssociation = function(data, callback) {
 		User.getUserField(data.uid, 'gplusid', function(err, gplusid) {
 			if (err) {
@@ -84,6 +107,7 @@
 				data.associations.push({
 					associated: true,
 					url: 'https://plus.google.com/' + gplusid + '/posts',
+					deauthUrl: nconf.get('url') + '/deauth/google',
 					name: constants.name,
 					icon: constants.admin.icon
 				});
@@ -184,7 +208,10 @@
 			async.apply(User.getUserField, uid, 'gplusid'),
 			function(oAuthIdToDelete, next) {
 				db.deleteObjectField('gplusid:uid', oAuthIdToDelete, next);
-			}
+			},
+			function (next) {
+				db.deleteObjectField('user:' + uid, 'gplusid', next);
+			},
 		], function(err) {
 			if (err) {
 				winston.error('[sso-google] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
