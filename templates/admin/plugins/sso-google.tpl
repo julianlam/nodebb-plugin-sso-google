@@ -34,11 +34,22 @@
 				<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret">
 			</div>
 			<div class="checkbox">
-				<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-					<input type="checkbox" class="mdl-switch__input" name="autoconfirm">
+				<label for="autoconfirm" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+					<input type="checkbox" class="mdl-switch__input" id="autoconfirm" name="autoconfirm">
 					<span class="mdl-switch__label">Skip email verification for people who register using SSO?</span>
 				</label>
 			</div>
+			<div class="checkbox">
+				<label for="disableRegistration" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+					<input type="checkbox" class="mdl-switch__input" id="disableRegistration" name="disableRegistration" />
+					<span class="mdl-switch__label">Disable user registration via SSO</span>
+				</label>
+			</div>
+			<p class="help-block">
+				Restricting registration means that only registered users can associate their account with this SSO strategy.
+				This restriction is useful if you have uesrs bypassing registration controls by using social media accounts, or
+				if you wish to use the NodeBB registration queue.
+			</p>
 		</form>
 	</div>
 </div>

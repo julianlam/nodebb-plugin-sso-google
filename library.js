@@ -21,7 +21,9 @@
 		}
 	});
 
-	var Google = {};
+	var Google = {
+		settings: undefined,
+	};
 
 	Google.init = function(data, callback) {
 		var hostHelpers = require.main.require('./src/routes/helpers');
@@ -49,47 +51,48 @@
 			});
 		});
 
-		callback();
+		meta.settings.get('sso-google', function (err, settings) {
+			Google.settings = settings;
+			callback();
+		});
 	}
 
 	Google.getStrategy = function(strategies, callback) {
-		meta.settings.get('sso-google', function(err, settings) {
-			if (!err && settings['id'] && settings['secret']) {
-				passport.use(new passportGoogle({
-					clientID: settings['id'],
-					clientSecret: settings['secret'],
-					callbackURL: nconf.get('url') + '/auth/google/callback',
-					passReqToCallback: true
-				}, function(req, accessToken, refreshToken, profile, done) {
-					if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
-						// Save Google-specific information to the user
-						User.setUserField(req.user.uid, 'gplusid', profile.id);
-						db.setObjectField('gplusid:uid', profile.id, req.user.uid);
-						return done(null, req.user);
+		if (Google.settings['id'] && Google.settings['secret']) {
+			passport.use(new passportGoogle({
+				clientID: Google.settings['id'],
+				clientSecret: Google.settings['secret'],
+				callbackURL: nconf.get('url') + '/auth/google/callback',
+				passReqToCallback: true
+			}, function(req, accessToken, refreshToken, profile, done) {
+				if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
+					// Save Google-specific information to the user
+					User.setUserField(req.user.uid, 'gplusid', profile.id);
+					db.setObjectField('gplusid:uid', profile.id, req.user.uid);
+					return done(null, req.user);
+				}
+
+				Google.login(profile.id, profile.displayName, profile.emails[0].value, profile._json.picture, function(err, user) {
+					if (err) {
+						return done(err);
 					}
 
-					Google.login(profile.id, profile.displayName, profile.emails[0].value, profile._json.picture, function(err, user) {
-						if (err) {
-							return done(err);
-						}
-
-						authenticationController.onSuccessfulLogin(req, user.uid);
-						done(null, user);
-					});
-				}));
-
-				strategies.push({
-					name: 'google',
-					url: '/auth/google',
-					callbackURL: '/auth/google/callback',
-					icon: constants.admin.icon,
-					scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-					prompt: 'select_account'
+					authenticationController.onSuccessfulLogin(req, user.uid);
+					done(null, user);
 				});
-			}
+			}));
 
-			callback(null, strategies);
-		});
+			strategies.push({
+				name: 'google',
+				url: '/auth/google',
+				callbackURL: '/auth/google/callback',
+				icon: constants.admin.icon,
+				scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+				prompt: 'select_account'
+			});
+		}
+
+		callback(null, strategies);
 	};
 
 	Google.appendUserHashWhitelist = function (data, callback) {
@@ -138,26 +141,23 @@
 			} else {
 				// New User
 				var success = function(uid) {
-					meta.settings.get('sso-google', function(err, settings) {
-						var autoConfirm = settings && settings['autoconfirm'] === "on" ? 1 : 0;
-						User.setUserField(uid, 'email:confirmed', autoConfirm);
-						if (autoConfirm) {
-							db.sortedSetRemove('users:notvalidated', uid);
-						}
-						// Save google-specific information to the user
-						User.setUserField(uid, 'gplusid', gplusid);
-						db.setObjectField('gplusid:uid', gplusid, uid);
+					var autoConfirm = Google.settings['autoconfirm'] === "on" ? 1 : 0;
+					User.setUserField(uid, 'email:confirmed', autoConfirm);
+					if (autoConfirm) {
+						db.sortedSetRemove('users:notvalidated', uid);
+					}
+					// Save google-specific information to the user
+					User.setUserField(uid, 'gplusid', gplusid);
+					db.setObjectField('gplusid:uid', gplusid, uid);
 
-						// Save their photo, if present
-						if (picture) {
-							User.setUserField(uid, 'uploadedpicture', picture);
-							User.setUserField(uid, 'picture', picture);
-						}
+					// Save their photo, if present
+					if (picture) {
+						User.setUserField(uid, 'uploadedpicture', picture);
+						User.setUserField(uid, 'picture', picture);
+					}
 
-						callback(null, {
-							uid: uid
-						});
-
+					callback(null, {
+						uid: uid
 					});
 				};
 
@@ -167,6 +167,11 @@
 					}
 
 					if (!uid) {
+						// Abort user creation if registration via SSO is restricted
+						if (Google.settings.disableRegistration === 'on') {
+							return callback(new Error('[[error:sso-registration-disabled, Google]]'));
+						}
+
 						User.create({username: handle, email: email}, function(err, uid) {
 							if(err) {
 								return callback(err);
