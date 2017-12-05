@@ -47,7 +47,7 @@
 					return next(err);
 				}
 
-				res.redirect(nconf.get('relative_path') + '/user/admin/edit');
+				res.redirect(nconf.get('relative_path') + '/me/edit');
 			});
 		});
 
