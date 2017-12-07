@@ -47,7 +47,7 @@
 			</div>
 			<p class="help-block">
 				Restricting registration means that only registered users can associate their account with this SSO strategy.
-				This restriction is useful if you have uesrs bypassing registration controls by using social media accounts, or
+				This restriction is useful if you have users bypassing registration controls by using social media accounts, or
 				if you wish to use the NodeBB registration queue.
 			</p>
 		</form>
