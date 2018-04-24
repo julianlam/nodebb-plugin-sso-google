@@ -39,7 +39,7 @@
 				service: "Google",
 			});
 		});
-		data.router.post('/deauth/google', data.middleware.requireUser, function (req, res, next) {
+		data.router.post('/deauth/google', [data.middleware.requireUser, data.middleware.applyCSRF], function (req, res, next) {
 			Google.deleteUserData({
 				uid: req.user.uid,
 			}, function (err) {
