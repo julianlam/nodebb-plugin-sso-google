@@ -1,17 +1,15 @@
-(function(module) {
+(function (module) {
 	"use strict";
 
-	var User = module.parent.require('./user'),
-		meta = module.parent.require('./meta'),
-		db = module.parent.require('../src/database'),
-		passport = module.parent.require('passport'),
+	var User = require.main.require('./src/user'),
+		meta = require.main.require('./src/meta'),
+		db = require.main.require('./src/database'),
+		passport = require.main.require('passport'),
 		passportGoogle = require('passport-google-oauth').OAuth2Strategy,
-		fs = module.parent.require('fs'),
-		path = module.parent.require('path'),
-		nconf = module.parent.require('nconf'),
-		async = module.parent.require('async');
+		nconf = require.main.require('nconf'),
+		async = require.main.require('async');
 
-	var authenticationController = module.parent.require('./controllers/authentication');
+	var authenticationController = require.main.require('./src/controllers/authentication');
 
 	var constants = Object.freeze({
 		'name': "Google",
@@ -25,8 +23,9 @@
 		settings: undefined,
 	};
 
-	Google.init = function(data, callback) {
+	Google.init = function (data, callback) {
 		var hostHelpers = require.main.require('./src/routes/helpers');
+
 		function render(req, res, next) {
 			res.render('admin/plugins/sso-google', {});
 		}
@@ -57,14 +56,14 @@
 		});
 	}
 
-	Google.getStrategy = function(strategies, callback) {
+	Google.getStrategy = function (strategies, callback) {
 		if (Google.settings['id'] && Google.settings['secret']) {
 			passport.use(new passportGoogle({
 				clientID: Google.settings['id'],
 				clientSecret: Google.settings['secret'],
 				callbackURL: nconf.get('url') + '/auth/google/callback',
 				passReqToCallback: true
-			}, function(req, accessToken, refreshToken, profile, done) {
+			}, function (req, accessToken, refreshToken, profile, done) {
 				if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {
 					// Save Google-specific information to the user
 					User.setUserField(req.user.uid, 'gplusid', profile.id);
@@ -72,7 +71,7 @@
 					return done(null, req.user);
 				}
 
-				Google.login(profile.id, profile.displayName, profile.emails[0].value, profile._json.picture, function(err, user) {
+				Google.login(profile.id, profile.displayName, profile.emails[0].value, profile._json.picture, function (err, user) {
 					if (err) {
 						return done(err);
 					}
@@ -100,8 +99,8 @@
 		return setImmediate(callback, null, data);
 	};
 
-	Google.getAssociation = function(data, callback) {
-		User.getUserField(data.uid, 'gplusid', function(err, gplusid) {
+	Google.getAssociation = function (data, callback) {
+		User.getUserField(data.uid, 'gplusid', function (err, gplusid) {
 			if (err) {
 				return callback(err, data);
 			}
@@ -127,9 +126,9 @@
 		})
 	};
 
-	Google.login = function(gplusid, handle, email, picture, callback) {
-		Google.getUidByGoogleId(gplusid, function(err, uid) {
-			if(err) {
+	Google.login = function (gplusid, handle, email, picture, callback) {
+		Google.getUidByGoogleId(gplusid, function (err, uid) {
+			if (err) {
 				return callback(err);
 			}
 
@@ -140,7 +139,7 @@
 				});
 			} else {
 				// New User
-				var success = function(uid) {
+				var success = function (uid) {
 					var autoConfirm = Google.settings['autoconfirm'] === "on" ? 1 : 0;
 					User.setUserField(uid, 'email:confirmed', autoConfirm);
 					if (autoConfirm) {
@@ -161,8 +160,8 @@
 					});
 				};
 
-				User.getUidByEmail(email, function(err, uid) {
-					if(err) {
+				User.getUidByEmail(email, function (err, uid) {
+					if (err) {
 						return callback(err);
 					}
 
@@ -172,8 +171,8 @@
 							return callback(new Error('[[error:sso-registration-disabled, Google]]'));
 						}
 
-						User.create({username: handle, email: email}, function(err, uid) {
-							if(err) {
+						User.create({ username: handle, email: email }, function (err, uid) {
+							if (err) {
 								return callback(err);
 							}
 
@@ -187,8 +186,8 @@
 		});
 	};
 
-	Google.getUidByGoogleId = function(gplusid, callback) {
-		db.getObjectField('gplusid:uid', gplusid, function(err, uid) {
+	Google.getUidByGoogleId = function (gplusid, callback) {
+		db.getObjectField('gplusid:uid', gplusid, function (err, uid) {
 			if (err) {
 				return callback(err);
 			}
@@ -196,7 +195,7 @@
 		});
 	};
 
-	Google.addMenuItem = function(custom_header, callback) {
+	Google.addMenuItem = function (custom_header, callback) {
 		custom_header.authentication.push({
 			"route": constants.admin.route,
 			"icon": constants.admin.icon,
@@ -206,18 +205,18 @@
 		callback(null, custom_header);
 	}
 
-	Google.deleteUserData = function(data, callback) {
+	Google.deleteUserData = function (data, callback) {
 		var uid = data.uid;
 
 		async.waterfall([
 			async.apply(User.getUserField, uid, 'gplusid'),
-			function(oAuthIdToDelete, next) {
+			function (oAuthIdToDelete, next) {
 				db.deleteObjectField('gplusid:uid', oAuthIdToDelete, next);
 			},
 			function (next) {
 				db.deleteObjectField('user:' + uid, 'gplusid', next);
 			},
-		], function(err) {
+		], function (err) {
 			if (err) {
 				winston.error('[sso-google] Could not remove OAuthId data for uid ' + uid + '. Error: ' + err);
 				return callback(err);
