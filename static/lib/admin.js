@@ -13,7 +13,7 @@ define('admin/plugins/sso-google', ['settings'], function(Settings) {
 					type: 'success',
 					alert_id: 'sso-google-saved',
 					title: 'Settings Saved',
-					message: 'Please reload your NodeBB to apply these settings',
+					message: 'Please rebuild and restart your NodeBB to apply these settings, or click on this alert to do so.',
 					clickfn: function() {
 						socket.emit('admin.reload');
 					}
