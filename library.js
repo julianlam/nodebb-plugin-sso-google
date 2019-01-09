@@ -5,7 +5,7 @@
 		meta = require.main.require('./src/meta'),
 		db = require.main.require('./src/database'),
 		passport = require.main.require('passport'),
-		passportGoogle = require('passport-google-oauth').OAuth2Strategy,
+		passportGoogle = require('passport-google-oauth20').Strategy,
 		nconf = require.main.require('nconf'),
 		async = require.main.require('async');
 
@@ -27,7 +27,9 @@
 		var hostHelpers = require.main.require('./src/routes/helpers');
 
 		function render(req, res, next) {
-			res.render('admin/plugins/sso-google', {});
+			res.render('admin/plugins/sso-google', {
+				baseUrl: nconf.get('url'),
+			});
 		}
 
 		data.router.get('/admin/plugins/sso-google', data.middleware.admin.buildHeader, render);
@@ -62,6 +64,7 @@
 				clientID: Google.settings['id'],
 				clientSecret: Google.settings['secret'],
 				callbackURL: nconf.get('url') + '/auth/google/callback',
+				userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",	// https://github.com/jaredhanson/passport-google-oauth2/pull/51/files#diff-04c6e90faac2675aa89e2176d2eec7d8R102
 				passReqToCallback: true
 			}, function (req, accessToken, refreshToken, profile, done) {
 				if (req.hasOwnProperty('user') && req.user.hasOwnProperty('uid') && req.user.uid > 0) {

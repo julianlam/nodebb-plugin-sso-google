@@ -26,7 +26,7 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "passport-google-oauth": "^0.2.0"
+    "passport-google-oauth20": "^1.0.0"
   },
   "nbbpm": {
     "compatibility": "^1.7.1"

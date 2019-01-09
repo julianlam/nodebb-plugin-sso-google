@@ -8,15 +8,18 @@
 					Create a <strong>New Project</strong> via the
 					<a href="https://code.google.com/apis/console/">API Manager <i class="fa fa-external-link"></i></a>
 				</li>
-				<li>Ensure you have the "Google+ API" enabled in your API console settings. To enable, press "Enable API" from the project dashboard and select "Google+ API"</li>
 				<li>
-					From the "Credentials" page, create a new OAuth 2.0 Client ID.
+					From the "Credentials" page, create a new "OAuth Client ID".
 					<ul>
 						<li>The "Application Type" is "Web application"</li>
 						<li>"Name" can be anything. Perhaps "NodeBB SSO" will suffice.</li>
+						<li>"Authorized Javascript origins" can be left empty</li>
 						<li>
 							The "Authorised Redirect URI" is your NodeBB's URL with `/auth/google/callback` appended to it.
-							(e.g. <code>http://example.org/auth/google/callback</code>
+							<ul>
+								<li>Our best guess for this site is <code>{baseUrl}/auth/google/callback</code></li>
+								<li>When you enter this value into the text field, be sure to hit <code>Enter</code> to submit the URL before saving</li>
+							</ul>
 						</li>
 					</ul>
 				</li>

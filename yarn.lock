@@ -5,50 +5,36 @@
 oauth@0.9.x:
   version "0.9.15"
   resolved "https://registry.yarnpkg.com/oauth/-/oauth-0.9.15.tgz#bd1fefaf686c96b75475aed5196412ff60cfb9c1"
+  integrity sha1-vR/vr2hslrdUda7VGWQS/2DPucE=
 
-passport-google-oauth@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/passport-google-oauth/-/passport-google-oauth-0.2.0.tgz#e9a87e9cd3bc71b08819fa44825cc5bf464a894a"
+passport-google-oauth20@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/passport-google-oauth20/-/passport-google-oauth20-1.0.0.tgz#3b960e8a1d70d1dbe794615c827c68c40392a5d0"
+  integrity sha1-O5YOih1w0dvnlGFcgnxoxAOSpdA=
   dependencies:
-    passport-oauth "^1.0.0"
-    pkginfo "0.3.x"
-
-passport-oauth1@1.x.x:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/passport-oauth1/-/passport-oauth1-1.1.0.tgz#a7de988a211f9cf4687377130ea74df32730c918"
-  dependencies:
-    oauth "0.9.x"
-    passport-strategy "1.x.x"
-    utils-merge "1.x.x"
+    passport-oauth2 "1.x.x"
 
 passport-oauth2@1.x.x:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/passport-oauth2/-/passport-oauth2-1.4.0.tgz#f62f81583cbe12609be7ce6f160b9395a27b86ad"
+  integrity sha1-9i+BWDy+EmCb585vFguTlaJ7hq0=
   dependencies:
     oauth "0.9.x"
     passport-strategy "1.x.x"
     uid2 "0.0.x"
     utils-merge "1.x.x"
 
-passport-oauth@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/passport-oauth/-/passport-oauth-1.0.0.tgz#90aff63387540f02089af28cdad39ea7f80d77df"
-  dependencies:
-    passport-oauth1 "1.x.x"
-    passport-oauth2 "1.x.x"
-
 passport-strategy@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
-
-pkginfo@0.3.x:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.3.1.tgz#5b29f6a81f70717142e09e765bbeab97b4f81e21"
+  integrity sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ=
 
 uid2@0.0.x:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/uid2/-/uid2-0.0.3.tgz#483126e11774df2f71b8b639dcd799c376162b82"
+  integrity sha1-SDEm4Rd03y9xuLY53NeZw3YWK4I=
 
 utils-merge@1.x.x:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
+  integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
