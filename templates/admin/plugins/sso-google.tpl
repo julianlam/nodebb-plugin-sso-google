@@ -36,6 +36,13 @@
 				<label for="secret">Secret</label>
 				<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret">
 			</div>
+			<div class="form-group">
+				<label for="style">Login Button Style</label>
+				<select class="form-control" name="style" id="style" title="Login Button Style">
+					<option value="light">Light</option>
+					<option value="dark">Dark</option>
+				</select>
+			</div>
 			<div class="checkbox">
 				<label for="autoconfirm" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
 					<input type="checkbox" class="mdl-switch__input" id="autoconfirm" name="autoconfirm">

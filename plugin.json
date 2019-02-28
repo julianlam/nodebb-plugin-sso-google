@@ -7,6 +7,7 @@
 	"templates": "templates",
 	"hooks": [
 		{ "hook": "static:app.load", "method": "init" },
+		{ "hook": "filter:config.get", "method": "exposeSettings" },
 		{ "hook": "filter:auth.list", "method": "getAssociation" },
 		{ "hook": "filter:auth.init", "method": "getStrategy" },
 		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
@@ -15,5 +16,11 @@
 	],
 	"acpScripts": [
 		"static/lib/admin.js"
-	]
+	],
+	"scripts": [
+		"static/lib/main.js"
+	],
+	"staticDirs": {
+		"images": "static/images"
+	}
 }
