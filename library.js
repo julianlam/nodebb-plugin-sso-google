@@ -58,6 +58,14 @@
 		});
 	}
 
+	Google.exposeSettings = function (data, callback) {
+		data['sso-google'] = {
+			style: Google.settings.style || 'light',
+		};
+
+		callback(null, data);
+	};
+
 	Google.getStrategy = function (strategies, callback) {
 		if (Google.settings['id'] && Google.settings['secret']) {
 			passport.use(new passportGoogle({
