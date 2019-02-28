@@ -1,7 +1,7 @@
 (function (module) {
 	"use strict";
 
-	var User = require.main.require('./src/user'),
+	var User = require.main.require('./src/user').async,
 		meta = require.main.require('./src/meta'),
 		db = require.main.require('./src/database'),
 		passport = require.main.require('passport'),
@@ -95,6 +95,24 @@
 		}
 
 		callback(null, strategies);
+	};
+
+	Google.restrictEmailDomains = async function (data, callback) {
+		const restrict = Google.settings['restrictEmailDomains'] === "on" ? 1 : 0;
+		if (!restrict) {
+			return callback();
+		}
+
+		const email = await User.getUserField(data.user.uid, 'email');
+		const domain = email.split('@')[1];
+		const assertedDomains = ['gmail.com', 'googlemail.com'];
+
+		if (domain && assertedDomains.includes(domain) && data.strategy.name !== 'google') {
+			// If a different SSO strategy tries to authenticate with an asserted email domain, reject it
+			return callback(new Error('Google email addresses must log into this forum via the "Sign in with Google" button'));
+		}
+
+		callback(null);
 	};
 
 	Google.appendUserHashWhitelist = function (data, callback) {

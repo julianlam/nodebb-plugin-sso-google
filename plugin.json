@@ -11,7 +11,8 @@
 		{ "hook": "filter:auth.init", "method": "getStrategy" },
 		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
 		{ "hook": "static:user.delete", "method": "deleteUserData" },
-		{ "hook": "filter:user.whitelistFields", "method": "appendUserHashWhitelist" }
+		{ "hook": "filter:user.whitelistFields", "method": "appendUserHashWhitelist" },
+		{ "hook": "static:auth.validate", "method": "restrictEmailDomains" }
 	],
 	"acpScripts": [
 		"static/lib/admin.js"

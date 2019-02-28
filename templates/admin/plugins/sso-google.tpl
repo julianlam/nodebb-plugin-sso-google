@@ -53,6 +53,18 @@
 				This restriction is useful if you have users bypassing registration controls by using social media accounts, or
 				if you wish to use the NodeBB registration queue.
 			</p>
+			<div class="checkbox">
+				<label for="restrictEmailDomains" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+					<input type="checkbox" class="mdl-switch__input" id="restrictEmailDomains" name="restrictEmailDomains" />
+					<span class="mdl-switch__label">Enforce login of Gmail/Googlemail domains</span>
+				</label>
+			</div>
+			<p class="help-block">
+				Enabling this option allows the Google SSO plugin to assert control over <code>@gmail.com</code> and
+				<code>@googlemail.com</code> email domains. This restriction means that other SSO plugins will not be
+				allowed to log users in if their user account has an email address using one of these two domains. Local
+				logins are unaffected.
+			</p>
 		</form>
 	</div>
 </div>
