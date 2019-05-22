@@ -9,7 +9,7 @@
 					<a href="https://code.google.com/apis/console/">API Manager <i class="fa fa-external-link"></i></a>
 				</li>
 				<li>
-					From the "Credentials" page, create a new "OAuth Client ID".
+					From the "Credentials" page, create a new "OAuth Client ID". (<a data-action="help-credentials" href="{config.relative_path}/plugins/nodebb-plugin-sso-google/images/credentials.png"><i class="fa fa-question-circle"></i> Where is this page?</a>)
 					<ul>
 						<li>The "Application Type" is "Web application"</li>
 						<li>"Name" can be anything. Perhaps "NodeBB SSO" will suffice.</li>

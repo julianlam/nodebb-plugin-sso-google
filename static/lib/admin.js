@@ -1,6 +1,7 @@
+'use strict';
+/* globals $, app, socket, require */
+
 define('admin/plugins/sso-google', ['settings'], function(Settings) {
-	'use strict';
-	/* globals $, app, socket, require */
 
 	var ACP = {};
 
@@ -19,6 +20,14 @@ define('admin/plugins/sso-google', ['settings'], function(Settings) {
 					}
 				});
 			});
+		});
+
+		$('a[data-action="help-credentials"]').on('click', function () {
+			bootbox.alert({
+				title: 'Where is the Credentials page?',
+				message: '<img src="' + config.relative_path + '/plugins/nodebb-plugin-sso-google/images/credentials.png" />'
+			});
+			return false;
 		});
 	};
 
