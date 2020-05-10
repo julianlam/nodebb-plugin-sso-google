@@ -87,8 +87,9 @@
 						return done(err);
 					}
 
-					authenticationController.onSuccessfulLogin(req, user.uid);
-					done(null, user);
+					authenticationController.onSuccessfulLogin(req, user.uid, function (err) {
+						done(err, !err ? user : null);
+					});
 				});
 			}));
 
