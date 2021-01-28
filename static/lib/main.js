@@ -1,7 +1,7 @@
 'use strict';
 
 require(['hooks'], function (hooks) {
-	hooks.on('static:script.init', ({ tpl_url }) => {
+	hooks.on('action:ajaxify.end', ({ tpl_url }) => {
 		if (tpl_url === 'login') {
 			var replaceEl = $('.alt-logins .google a i');
 			var replacement = document.createElement('img');
