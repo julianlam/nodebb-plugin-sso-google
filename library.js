@@ -108,7 +108,7 @@
 
 	Google.appendUserHashWhitelist = function (data, callback) {
 		data.whitelist.push('gplusid');
-		return setImmediate(callback, null, data);
+		setImmediate(callback, null, data);
 	};
 
 	Google.getAssociation = function (data, callback) {
