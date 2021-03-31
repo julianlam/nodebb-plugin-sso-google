@@ -65,7 +65,7 @@
 			if (loadedSettings.secret) {
 				Google.settings.secret = loadedSettings.secret;
 			}
-			Google.settings.autoconfirm = loadedSettings.autoconfirm === "on" ? 1 : 0;
+			Google.settings.autoconfirm = loadedSettings.autoconfirm === "on";
 			Google.settings.style = loadedSettings.style;
 			Google.settings.disableRegistration = loadedSettings.disableRegistration === "on";
 			callback();
