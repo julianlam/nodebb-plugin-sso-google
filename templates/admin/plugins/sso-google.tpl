@@ -23,7 +23,18 @@
 						</li>
 					</ul>
 				</li>
-				<li>You will be shown a screen containing your <strong>Client ID</strong> and <strong>Client Secret</strong>. Paste those two values below.</li>
+				<li>You will be shown a screen containing your <strong>Client ID</strong> and <strong>Client Secret</strong>.</li>
+				<li>You can set this values in two ways
+					<ul>
+						<li>Use environment variables
+							<ul>
+								<li><code>export SSO_GOOGLE_CLIENT_ID='Client ID'</code></li>
+								<li><code>export SSO_GOOGLE_CLIENT_SECRET='Client Secret'</code></li>
+							</ul>
+						</li>
+						<li>Use form below (this behavior overrides the environment variables)</li>
+					</ul>
+				</li>
 				<li>Save and restart NodeBB via the ACP Dashboard</li>
 			</ol>
 		</div>

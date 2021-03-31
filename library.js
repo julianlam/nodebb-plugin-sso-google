@@ -20,7 +20,13 @@
 	});
 
 	var Google = {
-		settings: undefined,
+		settings: {
+			id: process.env.SSO_GOOGLE_CLIENT_ID || undefined,
+			secret: process.env.SSO_GOOGLE_CLIENT_SECRET || undefined,
+			autoconfirm: 0,
+			style: 'light',
+			disableRegistration: false
+		},
 	};
 
 	Google.init = function (data, callback) {
@@ -52,8 +58,16 @@
 			});
 		});
 
-		meta.settings.get('sso-google', function (err, settings) {
-			Google.settings = settings;
+		meta.settings.get('sso-google', function (err, loadedSettings) {
+			if (loadedSettings.id) {
+				Google.settings.id = loadedSettings.id;
+			}
+			if (loadedSettings.secret) {
+				Google.settings.secret = loadedSettings.secret;
+			}
+			Google.settings.autoconfirm = loadedSettings.autoconfirm === "on";
+			Google.settings.style = loadedSettings.style;
+			Google.settings.disableRegistration = loadedSettings.disableRegistration === "on";
 			callback();
 		});
 	}
@@ -152,7 +166,7 @@
 			} else {
 				// New User
 				var success = function (uid) {
-					var autoConfirm = Google.settings['autoconfirm'] === "on" ? 1 : 0;
+					var autoConfirm = Google.settings['autoconfirm'];
 					User.setUserField(uid, 'email:confirmed', autoConfirm);
 					if (autoConfirm) {
 						db.sortedSetRemove('users:notvalidated', uid);
@@ -179,7 +193,7 @@
 
 					if (!uid) {
 						// Abort user creation if registration via SSO is restricted
-						if (Google.settings.disableRegistration === 'on') {
+						if (Google.settings.disableRegistration) {
 							return callback(new Error('[[error:sso-registration-disabled, Google]]'));
 						}
 
