@@ -167,9 +167,8 @@
 				// New User
 				var success = function (uid) {
 					var autoConfirm = Google.settings['autoconfirm'];
-					User.setUserField(uid, 'email:confirmed', autoConfirm);
 					if (autoConfirm) {
-						db.sortedSetRemove('users:notvalidated', uid);
+						User.email.confirmByUid(uid);
 					}
 					// Save google-specific information to the user
 					User.setUserField(uid, 'gplusid', gplusid);
