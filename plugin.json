@@ -14,9 +14,9 @@
 		{ "hook": "static:user.delete", "method": "deleteUserData" },
 		{ "hook": "filter:user.whitelistFields", "method": "appendUserHashWhitelist" }
 	],
-	"acpScripts": [
-		"static/lib/admin.js"
-	],
+	"modules": {
+		"../admin/plugins/sso-google": "static/lib/admin.js"
+	},
 	"scripts": [
 		"static/lib/main.js"
 	],
