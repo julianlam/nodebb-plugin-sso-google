@@ -15,7 +15,7 @@
 		{ "hook": "filter:user.whitelistFields", "method": "appendUserHashWhitelist" }
 	],
 	"modules": {
-		"../admin/plugins/sso-google": "static/lib/admin.js"
+		"../admin/plugins/sso-google.js": "static/lib/admin.js"
 	},
 	"scripts": [
 		"static/lib/main.js"
