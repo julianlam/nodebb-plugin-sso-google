@@ -1,9 +1,9 @@
-<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title">[[user:sso.dissociate-confirm-title]]</h3>
+<div class="col-12 col-sm-8 col-offset-sm-2 col-md-6 col-offset-md-3">
+	<div class="card">
+		<div class="card-header">
+			<span class="h4">[[user:sso.dissociate-confirm-title]]</span>
 		</div>
-		<div class="panel-body">
+		<div class="card-body">
 			[[user:sso.dissociate-confirm, {service}]]
 
 			<hr>

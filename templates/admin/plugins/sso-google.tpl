@@ -1,6 +1,6 @@
 <div class="row">
-	<div class="col-sm-2 col-xs-12 settings-header">Google+ SSO</div>
-	<div class="col-sm-10 col-xs-12">
+	<div class="col-sm-2 col-12 settings-header">Google+ SSO</div>
+	<div class="col-sm-10 col-12">
 		<div class="alert alert-info">
 			<strong>Quick Start</strong>
 			<ol>
@@ -39,34 +39,34 @@
 			</ol>
 		</div>
 		<form role="form" class="sso-google-settings">
-			<div class="form-group">
+			<div class="mb-3">
 				<label for="app_id">Client ID</label>
 				<input type="text" name="id" title="Client ID" class="form-control input-lg" placeholder="Client ID">
 			</div>
-			<div class="form-group">
+			<div class="mb-3">
 				<label for="secret">Secret</label>
 				<input type="text" name="secret" title="Client Secret" class="form-control" placeholder="Client Secret">
 			</div>
-			<div class="form-group">
+			<div class="mb-3">
 				<label for="style">Login Button Style</label>
-				<select class="form-control" name="style" id="style" title="Login Button Style">
+				<select class="form-select" name="style" id="style" title="Login Button Style">
 					<option value="light">Light</option>
 					<option value="dark">Dark</option>
 				</select>
 			</div>
-			<div class="checkbox">
-				<label for="autoconfirm" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-					<input type="checkbox" class="mdl-switch__input" id="autoconfirm" name="autoconfirm">
-					<span class="mdl-switch__label">Skip email verification for people who register using SSO?</span>
+			<div class="form-check">
+				<input type="checkbox" class="form-check-input" id="autoconfirm" name="autoconfirm">
+				<label for="autoconfirm" class="form-check-label">
+					Skip email verification for people who register using SSO?
 				</label>
 			</div>
-			<div class="checkbox">
-				<label for="disableRegistration" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-					<input type="checkbox" class="mdl-switch__input" id="disableRegistration" name="disableRegistration" />
-					<span class="mdl-switch__label">Disable user registration via SSO</span>
+			<div class="form-check">
+				<input type="checkbox" class="form-check-input" id="disableRegistration" name="disableRegistration" />
+				<label for="disableRegistration" class="form-check-label">
+					Disable user registration via SSO
 				</label>
 			</div>
-			<p class="help-block">
+			<p class="form-text">
 				Restricting registration means that only registered users can associate their account with this SSO strategy.
 				This restriction is useful if you have users bypassing registration controls by using social media accounts, or
 				if you wish to use the NodeBB registration queue.
