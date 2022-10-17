@@ -26,9 +26,14 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
+    "eslint-config-nodebb": "0.1.1",
     "passport-google-oauth20": "^1.0.0"
   },
   "nbbpm": {
     "compatibility": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "8.x",
+    "eslint-plugin-import": "2.x"
   }
 }
