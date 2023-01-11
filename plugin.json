@@ -16,11 +16,5 @@
 	],
 	"modules": {
 		"../admin/plugins/sso-google.js": "static/lib/admin.js"
-	},
-	"scripts": [
-		"static/lib/main.js"
-	],
-	"staticDirs": {
-		"images": "static/images"
 	}
 }
