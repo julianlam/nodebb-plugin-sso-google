@@ -164,6 +164,8 @@
 	};
 
 	Google.login = function (gplusid, handle, email, picture, callback) {
+		const autoConfirm = Google.settings.autoconfirm;
+
 		Google.getUidByGoogleId(gplusid, (err, uid) => {
 			if (err) {
 				return callback(err);
@@ -176,10 +178,10 @@
 				});
 			} else {
 				// New User
-				const success = function (uid) {
-					const autoConfirm = Google.settings.autoconfirm;
+				const success = async (uid) => {
 					if (autoConfirm) {
-						User.email.confirmByUid(uid);
+						await User.setUserField(uid, 'email', email);
+						await User.email.confirmByUid(uid);
 					}
 					// Save google-specific information to the user
 					User.setUserField(uid, 'gplusid', gplusid);
@@ -207,7 +209,7 @@
 							return callback(new Error('[[error:sso-registration-disabled, Google]]'));
 						}
 
-						User.create({ username: handle, email: email }, (err, uid) => {
+						User.create({ username: handle, email: !autoConfirm ? email : undefined }, (err, uid) => {
 							if (err) {
 								return callback(err);
 							}
