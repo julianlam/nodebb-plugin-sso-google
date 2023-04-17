@@ -33,16 +33,13 @@
 	Google.init = function (data, callback) {
 		const hostHelpers = require.main.require('./src/routes/helpers');
 
-		function render(req, res) {
+		hostHelpers.setupAdminPageRoute(data.router, '/admin/plugins/sso-google', (req, res) => {
 			res.render('admin/plugins/sso-google', {
 				baseUrl: nconf.get('url'),
 			});
-		}
+		});
 
-		data.router.get('/admin/plugins/sso-google', data.middleware.admin.buildHeader, render);
-		data.router.get('/api/admin/plugins/sso-google', render);
-
-		hostHelpers.setupPageRoute(data.router, '/deauth/google', data.middleware, [data.middleware.requireUser], (req, res) => {
+		hostHelpers.setupPageRoute(data.router, '/deauth/google', [data.middleware.requireUser], (req, res) => {
 			res.render('plugins/sso-google/deauth', {
 				service: 'Google',
 			});
