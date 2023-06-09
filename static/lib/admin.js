@@ -1,6 +1,6 @@
 'use strict';
 
-define('admin/plugins/sso-google', ['settings'], function (Settings) {
+define('admin/plugins/sso-google', ['settings', 'alerts'], function (Settings, alerts) {
 	var ACP = {};
 
 	ACP.init = function () {
@@ -8,7 +8,7 @@ define('admin/plugins/sso-google', ['settings'], function (Settings) {
 
 		$('#save').on('click', function () {
 			Settings.save('sso-google', $('.sso-google-settings'), function () {
-				app.alert({
+				alerts.alert({
 					type: 'success',
 					alert_id: 'sso-google-saved',
 					title: 'Settings Saved',

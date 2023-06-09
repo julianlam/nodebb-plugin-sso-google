@@ -35,6 +35,7 @@
 
 		hostHelpers.setupAdminPageRoute(data.router, '/admin/plugins/sso-google', (req, res) => {
 			res.render('admin/plugins/sso-google', {
+				title: constants.name,
 				baseUrl: nconf.get('url'),
 			});
 		});
