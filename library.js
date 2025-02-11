@@ -45,17 +45,12 @@
 				service: 'Google',
 			});
 		});
-		data.router.post('/deauth/google', [data.middleware.requireUser, data.middleware.applyCSRF], (req, res, next) => {
-			Google.deleteUserData({
+		data.router.post('/deauth/google', [data.middleware.requireUser, data.middleware.applyCSRF], hostHelpers.tryRoute(async (req, res) => {
+			await Google.deleteUserData({
 				uid: req.user.uid,
-			}, (err) => {
-				if (err) {
-					return next(err);
-				}
-
-				res.redirect(`${nconf.get('relative_path')}/me/edit`);
 			});
-		});
+			res.redirect(`${nconf.get('relative_path')}/me/edit`);
+		}));
 
 		meta.settings.get('sso-google', (_, loadedSettings) => {
 			if (loadedSettings.id) {
@@ -241,24 +236,13 @@
 		callback(null, custom_header);
 	};
 
-	Google.deleteUserData = function (data, callback) {
+	Google.deleteUserData = async function (data) {
 		const { uid } = data;
-
-		async.waterfall([
-			async.apply(User.getUserField, uid, 'gplusid'),
-			function (oAuthIdToDelete, next) {
-				db.deleteObjectField('gplusid:uid', oAuthIdToDelete, next);
-			},
-			function (next) {
-				db.deleteObjectField(`user:${uid}`, 'gplusid', next);
-			},
-		], (err) => {
-			if (err) {
-				winston.error(`[sso-google] Could not remove OAuthId data for uid ${uid}. Error: ${err}`);
-				return callback(err);
-			}
-			callback(null, uid);
-		});
+		const gplusid = await User.getUserField(uid, 'gplusid');
+		if (gplusid) {
+			db.deleteObjectField('gplusid:uid', gplusid);
+			db.deleteObjectField(`user:${uid}`, 'gplusid');
+		}
 	};
 
 	module.exports = Google;
