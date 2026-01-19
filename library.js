@@ -37,7 +37,7 @@ Google.init = async function (data) {
 
 	hostHelpers.setupPageRoute(data.router, '/deauth/google', [data.middleware.requireUser], (req, res) => {
 		res.render('plugins/sso-google/deauth', {
-			service: 'Google',
+			service: constants.name,
 		});
 	});
 	data.router.post('/deauth/google', [data.middleware.requireUser, data.middleware.applyCSRF], hostHelpers.tryRoute(async (req, res) => {
@@ -74,7 +74,7 @@ Google.filterAuthInit = function (strategies) {
 			callbackURL: `${nconf.get('url')}/auth/google/callback`,
 			userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo', // https://github.com/jaredhanson/passport-google-oauth2/pull/51/files#diff-04c6e90faac2675aa89e2176d2eec7d8R102
 			passReqToCallback: true,
-		}, (async (req, accessToken, refreshToken, profile, done) => {
+		}, async (req, accessToken, refreshToken, profile, done) => {
 			try {
 				if (req?.user?.uid && req.user.uid > 0) {
 					// Save Google-specific information to the user
@@ -97,7 +97,7 @@ Google.filterAuthInit = function (strategies) {
 			} catch (err) {
 				done(err);
 			}
-		})));
+		}));
 
 		strategies.push({
 			name: 'google',
