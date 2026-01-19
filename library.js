@@ -222,7 +222,10 @@ Google.filterUserGetRegistrationQueue = async (hookData) => {
 	const { users } = hookData;
 	users.forEach((user) => {
 		if (user?.gplusid) {
-			user.ssoIcon = 'fa-brands fa-google';
+			user.sso = {
+				icon: 'fa-brands fa-google',
+				name: constants.name,
+			};
 		}
 	});
 	return hookData;
