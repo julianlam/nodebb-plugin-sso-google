@@ -93,7 +93,7 @@ Google.filterAuthInit = function (strategies) {
 					return done(null, false, { message });
 				}
 
-				done(null, { uid: uid });
+				done(null, { uid });
 			} catch (err) {
 				done(err);
 			}
