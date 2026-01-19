@@ -16,14 +16,13 @@ const constants = Object.freeze({
 	},
 });
 
-const Google = {
-	settings: {
-		id: process.env.SSO_GOOGLE_CLIENT_ID || undefined,
-		secret: process.env.SSO_GOOGLE_CLIENT_SECRET || undefined,
-		autoconfirm: 0,
-		style: 'light',
-		disableRegistration: false,
-	},
+const Google = module.exports;
+Google.settings = {
+	id: process.env.SSO_GOOGLE_CLIENT_ID || undefined,
+	secret: process.env.SSO_GOOGLE_CLIENT_SECRET || undefined,
+	autoconfirm: 0,
+	style: 'light',
+	disableRegistration: false,
 };
 
 Google.init = async function (data) {
@@ -64,7 +63,6 @@ Google.filterConfigGet = function (data) {
 	data['sso-google'] = {
 		style: Google.settings.style || 'light',
 	};
-
 	return data;
 };
 
@@ -87,10 +85,15 @@ Google.filterAuthInit = function (strategies) {
 					return done(null, req.user);
 				}
 
-				const userData = await Google.login(
+				const { queued, uid, message } = await Google.login(
 					profile.id, profile.displayName, profile.emails[0].value, profile._json.picture
 				);
-				done(null, userData);
+
+				if (queued) {
+					return done(null, false, { message });
+				}
+
+				done(null, { uid: uid });
 			} catch (err) {
 				done(err);
 			}
@@ -129,7 +132,7 @@ Google.filterAuthList = async function (data) {
 	if (gplusid) {
 		data.associations.push({
 			associated: true,
-			url: `https://plus.google.com/${gplusid}/posts`,
+			url: `#`, // no public profile url for google
 			deauthUrl: `${nconf.get('url')}/deauth/google`,
 			name: constants.name,
 			icon: constants.admin.icon,
@@ -145,44 +148,78 @@ Google.filterAuthList = async function (data) {
 	return data;
 };
 
-Google.login = async function (gplusid, handle, email, picture) {
-	const autoConfirm = Google.settings.autoconfirm;
-
+Google.login = async function (req, gplusid, handle, email, picture) {
 	let uid = await Google.getUidByGoogleId(gplusid);
 	if (uid) { // Existing User
 		return { uid };
 	}
 
 	uid = await User.getUidByEmail(email);
-	if (!uid) {
-		// Abort user creation if registration via SSO is restricted
-		if (Google.settings.disableRegistration) {
-			throw new Error('[[error:sso-registration-disabled, Google]]');
+	if (uid) { // Link Google account to existing user with same email
+		await Promise.all([
+			User.setUserField(uid, 'gplusid', gplusid),
+			db.setObjectField('gplusid:uid', gplusid, uid),
+		]);
+		return { uid };
+	}
+
+	if (Google.settings.disableRegistration) {
+		throw new Error('[[error:sso-registration-disabled, Google]]');
+	}
+
+	return await User.createOrQueue(req, {
+		gplusid, // passing to create so it can be saved in registration queue
+		picture,
+		username: handle,
+		email: email,
+	}, {
+		emailVerification: Google.settings.autoconfirm ? 'verify' : 'send',
+	});
+};
+
+// If registration queue is enabled this hook will be called,
+// save gplusid and picture to registration queue along with other data from core
+Google.addToApprovalQueue = async (hookData) => {
+	// "data" is what will be saved to the registration queue
+	// "userData" is sent from google
+	await saveGoogleSpecificData(hookData.data, hookData.userData);
+	return hookData;
+};
+
+// triggered when a user is created (either directly or from approval queue)
+Google.filterUserCreate = async (hookData) => {
+	// "user" is what will be saved to the database
+	// "data" is sent from register page or from registration queue
+	await saveGoogleSpecificData(hookData.user, hookData.data);
+	return hookData;
+};
+
+async function saveGoogleSpecificData(targetObj, sourceObj) {
+	const { gplusid, picture } = sourceObj;
+	if (gplusid) {
+		const uid = await Google.getUidByGoogleId(gplusid);
+		if (uid) {
+			throw new Error('[[error:sso-account-exists, Google]]');
 		}
-
-		// New User
-		uid = await User.create({ username: handle, email: !autoConfirm ? email : undefined });
+		targetObj.gplusid = gplusid;
+		if (picture) {
+			targetObj.picture = picture;
+			targetObj.uploadedpicture = picture;
+		}
 	}
+}
 
-	if (autoConfirm) {
-		await User.setUserField(uid, 'email', email);
-		await User.email.confirmByUid(uid);
+// fired after user creation, save gplusid => uid mapping
+Google.actionUserCreate = async (hookData) => {
+	const { uid } = hookData.user;
+	const gplusid = await User.getUserField(uid, 'gplusid');
+	if (gplusid) {
+		await db.setObjectField('gplusid:uid', gplusid, uid);
 	}
-	// Save google-specific information to the user
-	await User.setUserField(uid, 'gplusid', gplusid);
-	await db.setObjectField('gplusid:uid', gplusid, uid);
-
-	// Save their photo, if present
-	if (picture) {
-		await User.setUserField(uid, 'uploadedpicture', picture);
-		await User.setUserField(uid, 'picture', picture);
-	}
-	return { uid };
 };
 
 Google.getUidByGoogleId = async function (gplusid) {
-	const uid = await db.getObjectField('gplusid:uid', gplusid);
-	return uid;
+	return await db.getObjectField('gplusid:uid', gplusid);
 };
 
 Google.addAdminMenuItem = function (custom_header) {
@@ -191,7 +228,6 @@ Google.addAdminMenuItem = function (custom_header) {
 		icon: constants.admin.icon,
 		name: constants.name,
 	});
-
 	return custom_header;
 };
 
@@ -203,6 +239,3 @@ Google.deleteUserData = async function (data) {
 		await db.deleteObjectField(`user:${uid}`, 'gplusid');
 	}
 };
-
-module.exports = Google;
-

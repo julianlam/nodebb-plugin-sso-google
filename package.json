@@ -32,7 +32,7 @@
     "passport-google-oauth20": "^1.0.0"
   },
   "nbbpm": {
-    "compatibility": "^4.0.0"
+    "compatibility": "^4.9.0"
   },
   "devDependencies": {
     "eslint": "9.39.2",

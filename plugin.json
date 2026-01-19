@@ -12,7 +12,10 @@
 		{ "hook": "filter:auth.init", "method": "filterAuthInit" },
 		{ "hook": "filter:admin.header.build", "method": "addAdminMenuItem" },
 		{ "hook": "static:user.delete", "method": "deleteUserData" },
-		{ "hook": "filter:user.whitelistFields", "method": "filterUserWhitelistFields" }
+		{ "hook": "filter:user.whitelistFields", "method": "filterUserWhitelistFields" },
+		{ "hook": "filter:user.addToApprovalQueue", "method": "addToApprovalQueue" },
+		{ "hook": "filter:user.create", "method": "filterUserCreate" },
+		{ "hook": "action:user.create", "method": "actionUserCreate" }
 	],
 	"modules": {
 		"../admin/plugins/sso-google.js": "static/lib/admin.js"
