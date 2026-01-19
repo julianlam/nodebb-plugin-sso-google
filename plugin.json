@@ -15,7 +15,8 @@
 		{ "hook": "filter:user.whitelistFields", "method": "filterUserWhitelistFields" },
 		{ "hook": "filter:user.addToApprovalQueue", "method": "addToApprovalQueue" },
 		{ "hook": "filter:user.create", "method": "filterUserCreate" },
-		{ "hook": "action:user.create", "method": "actionUserCreate" }
+		{ "hook": "action:user.create", "method": "actionUserCreate" },
+		{ "hook": "filter:user.getRegistrationQueue", "method": "filterUserGetRegistrationQueue" }
 	],
 	"modules": {
 		"../admin/plugins/sso-google.js": "static/lib/admin.js"

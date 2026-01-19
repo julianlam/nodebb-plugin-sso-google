@@ -218,6 +218,16 @@ Google.actionUserCreate = async (hookData) => {
 	}
 };
 
+Google.filterUserGetRegistrationQueue = async (hookData) => {
+	const { users } = hookData;
+	users.forEach((user) => {
+		if (user?.gplusid) {
+			user.ssoIcon = 'fa-brands fa-google';
+		}
+	});
+	return hookData;
+};
+
 Google.getUidByGoogleId = async function (gplusid) {
 	return await db.getObjectField('gplusid:uid', gplusid);
 };
