@@ -167,8 +167,6 @@ Google.login = async function (req, gplusid, handle, email, picture) {
 		throw new Error('[[error:sso-registration-disabled, Google]]');
 	}
 
-	User.checkUsernameLength(handle);
-
 	return await User.createOrQueue(req, {
 		gplusid, // passing to create so it can be saved in registration queue
 		picture,
