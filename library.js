@@ -38,7 +38,7 @@ Google.init = async function (data) {
 
 	hostHelpers.setupPageRoute(data.router, '/deauth/google', [data.middleware.requireUser], (req, res) => {
 		res.render('plugins/sso-google/deauth', {
-			service: constants.name,
+			service: 'Google',
 		});
 	});
 	data.router.post('/deauth/google', [data.middleware.requireUser, data.middleware.applyCSRF], hostHelpers.tryRoute(async (req, res) => {
@@ -234,7 +234,8 @@ Google.filterUserGetRegistrationQueue = async (hookData) => {
 };
 
 Google.getUidByGoogleId = async function (gplusid) {
-	return await db.getObjectField('gplusid:uid', gplusid);
+	const uid = await db.getObjectField('gplusid:uid', gplusid);
+	return uid;
 };
 
 Google.addAdminMenuItem = function (custom_header) {
@@ -257,3 +258,4 @@ Google.deleteUserData = async function (data) {
 };
 
 module.exports = Google;
+
