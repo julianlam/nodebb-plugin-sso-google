@@ -31,7 +31,7 @@ Google.init = async function (data) {
 
 	hostHelpers.setupAdminPageRoute(data.router, '/admin/plugins/sso-google', (req, res) => {
 		res.render('admin/plugins/sso-google', {
-			title: constants.name,
+			title: 'Google',
 			baseUrl: nconf.get('url'),
 		});
 	});
@@ -64,6 +64,7 @@ Google.filterConfigGet = function (data) {
 	data['sso-google'] = {
 		style: Google.settings.style || 'light',
 	};
+
 	return data;
 };
 
