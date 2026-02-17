@@ -16,13 +16,14 @@ const constants = Object.freeze({
 	},
 });
 
-const Google = module.exports;
-Google.settings = {
-	id: process.env.SSO_GOOGLE_CLIENT_ID || undefined,
-	secret: process.env.SSO_GOOGLE_CLIENT_SECRET || undefined,
-	autoconfirm: 0,
-	style: 'light',
-	disableRegistration: false,
+const Google = {
+	settings: {
+		id: process.env.SSO_GOOGLE_CLIENT_ID || undefined,
+		secret: process.env.SSO_GOOGLE_CLIENT_SECRET || undefined,
+		autoconfirm: 0,
+		style: 'light',
+		disableRegistration: false,
+	},
 };
 
 Google.init = async function (data) {
@@ -241,6 +242,7 @@ Google.addAdminMenuItem = function (custom_header) {
 		icon: constants.admin.icon,
 		name: constants.name,
 	});
+
 	return custom_header;
 };
 
@@ -252,3 +254,5 @@ Google.deleteUserData = async function (data) {
 		await db.deleteObjectField(`user:${uid}`, 'gplusid');
 	}
 };
+
+module.exports = Google;
