@@ -31,7 +31,7 @@ Google.init = async function (data) {
 
 	hostHelpers.setupAdminPageRoute(data.router, '/admin/plugins/sso-google', (req, res) => {
 		res.render('admin/plugins/sso-google', {
-			title: 'Google',
+			title: constants.name,
 			baseUrl: nconf.get('url'),
 		});
 	});
