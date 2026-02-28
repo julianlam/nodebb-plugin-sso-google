@@ -35,7 +35,7 @@
     "compatibility": "^4.9.0"
   },
   "devDependencies": {
-    "eslint": "9.39.2",
-    "eslint-config-nodebb": "^1.1.4"
+    "eslint": "10.0.2",
+    "eslint-config-nodebb": "^2.0.0"
   }
 }
