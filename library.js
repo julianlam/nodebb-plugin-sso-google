@@ -88,7 +88,7 @@ Google.filterAuthInit = function (strategies) {
 				}
 
 				const { queued, uid, message } = await Google.login(
-					profile.id, profile.displayName, profile.emails[0].value, profile._json.picture
+					req, profile.id, profile.displayName, profile.emails[0].value, profile._json.picture
 				);
 
 				if (queued) {
