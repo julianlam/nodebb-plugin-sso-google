@@ -1,7 +1,7 @@
 'use strict';
 
-define('admin/plugins/sso-google', ['settings', 'alerts'], function (Settings, alerts) {
-	var ACP = {};
+define('admin/plugins/sso-google', ['settings', 'alerts', 'modals'], function (Settings, alerts, modals) {
+	const ACP = {};
 
 	ACP.init = function () {
 		Settings.load('sso-google', $('.sso-google-settings'));
@@ -21,9 +21,9 @@ define('admin/plugins/sso-google', ['settings', 'alerts'], function (Settings, a
 		});
 
 		$('a[data-action="help-credentials"]').on('click', function () {
-			bootbox.alert({
+			modals.alert({
 				title: 'Where is the Credentials page?',
-				message: '<img src="' + config.relative_path + '/plugins/nodebb-plugin-sso-google/images/credentials.png" />',
+				message: `<img src="${config.relative_path}/plugins/nodebb-plugin-sso-google/images/credentials.png" />`,
 			});
 			return false;
 		});

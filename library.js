@@ -1,12 +1,12 @@
 'use strict';
 
-const nconf = require.main.require('nconf');
+const nconf = nodebb.require('nconf');
 const passportGoogle = require('passport-google-oauth20').Strategy;
 
-const User = require.main.require('./src/user');
-const meta = require.main.require('./src/meta');
-const db = require.main.require('./src/database');
-const passport = require.main.require('passport');
+const User = nodebb.require('./src/user');
+const meta = nodebb.require('./src/meta');
+const db = nodebb.require('./src/database');
+const passport = nodebb.require('passport');
 
 const constants = Object.freeze({
 	name: 'Google',
@@ -27,7 +27,7 @@ const Google = {
 };
 
 Google.init = async function (data) {
-	const hostHelpers = require.main.require('./src/routes/helpers');
+	const hostHelpers = nodebb.require('./src/routes/helpers');
 
 	hostHelpers.setupAdminPageRoute(data.router, '/admin/plugins/sso-google', (req, res) => {
 		res.render('admin/plugins/sso-google', {
