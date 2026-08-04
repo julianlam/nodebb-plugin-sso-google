@@ -169,12 +169,16 @@ Google.login = async function (req, gplusid, handle, email, picture) {
 		throw new Error('[[error:sso-registration-disabled, Google]]');
 	}
 
-	return await User.createOrQueue(req, {
+	const userData = {
 		gplusid, // passing to create so it can be saved in registration queue
-		picture,
 		username: handle,
 		email: email,
-	}, {
+	};
+	if (picture && canSetProfilePicture()) {
+		userData.picture = picture;
+	}
+
+	return await User.createOrQueue(req, userData, {
 		emailVerification: Google.settings.autoconfirm ? 'verify' : 'send',
 	});
 };
@@ -204,11 +208,17 @@ async function saveGoogleSpecificData(targetObj, sourceObj) {
 			throw new Error('[[error:sso-account-exists, Google]]');
 		}
 		targetObj.gplusid = gplusid;
-		if (picture) {
+		if (picture && canSetProfilePicture()) {
 			targetObj.picture = picture;
 			targetObj.uploadedpicture = picture;
 		}
 	}
+}
+
+function canSetProfilePicture() {
+	const minimumReputation = meta.config['min:rep:profile-picture'];
+	const isReputationDisabled = meta.config['reputation:disabled'];
+	return Boolean(isReputationDisabled) || !(minimumReputation > 0);
 }
 
 // fired after user creation, save gplusid => uid mapping
@@ -258,4 +268,3 @@ Google.deleteUserData = async function (data) {
 };
 
 module.exports = Google;
-
