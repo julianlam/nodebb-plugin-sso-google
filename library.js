@@ -218,7 +218,9 @@ async function saveGoogleSpecificData(targetObj, sourceObj) {
 function canSetProfilePicture() {
 	const minimumReputation = meta.config['min:rep:profile-picture'];
 	const isReputationDisabled = meta.config['reputation:disabled'];
-	return Boolean(isReputationDisabled) || !(minimumReputation > 0);
+	const { allowProfileImageUploads } = meta.config;
+	return Boolean(allowProfileImageUploads) &&
+		(Boolean(isReputationDisabled) || !(minimumReputation > 0));
 }
 
 // fired after user creation, save gplusid => uid mapping
